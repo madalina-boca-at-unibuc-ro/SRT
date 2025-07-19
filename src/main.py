@@ -1,8 +1,5 @@
-import sys
 import os
-
-# Add the src directory to the Python path
-sys.path.insert(0, os.path.join(os.path.dirname(__file__)))
+import sys 
 
 from ursina import Entity, Text, Button, camera, color, mouse, application
 from ursina.prefabs.first_person_controller import FirstPersonController
@@ -21,8 +18,7 @@ class MainMenu(Entity):
         self.menu_background = Entity(
             parent=camera.ui,
             model="quad",
-            texture=os.path.join(os.path.dirname(__file__), "main_texture.png"),
-            scale=2,
+            texture="main_texture.jpg",
             z=1,
         )
         self.title = Text(
@@ -108,6 +104,9 @@ def load_scenario(scenario_class):
     global current_scenario
     main_menu.hide()
     current_scenario = scenario_class(escape_callback=handle_escape)
+    # Lock mouse for scenario interaction
+    mouse.locked = True
+    mouse.visible = False
 
 
 def handle_escape():
@@ -122,6 +121,9 @@ def unload_scenario(scenario):
         scenario.cleanup()
     current_scenario = None
     main_menu.show()
+    # Unlock mouse for menu interaction
+    mouse.locked = False
+    mouse.visible = True
 
 
 def input(key):
@@ -133,5 +135,18 @@ def update():
     if current_scenario:
         current_scenario.update()
 
+
+# Create a global input handler
+class InputHandler(Entity):
+    def input(self, key):
+        if current_scenario and hasattr(current_scenario, "input"):
+            current_scenario.input(key)
+    
+    def update(self):
+        if current_scenario:
+            current_scenario.update()
+
+# Create the input handler
+input_handler = InputHandler()
 
 app.run()
