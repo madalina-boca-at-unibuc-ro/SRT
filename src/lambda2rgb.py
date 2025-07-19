@@ -1,8 +1,4 @@
-import colour
 import numpy as np
-import math
-
-
 import math
 
 

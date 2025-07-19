@@ -1,6 +1,10 @@
-from ursina import (
-    Entity, Text, Button, camera, color, mouse, application
-)
+import sys
+import os
+
+# Add the src directory to the Python path
+sys.path.insert(0, os.path.join(os.path.dirname(__file__)))
+
+from ursina import Entity, Text, Button, camera, color, mouse, application
 from ursina.prefabs.first_person_controller import FirstPersonController
 from ursina import Ursina
 
@@ -15,7 +19,11 @@ class MainMenu(Entity):
     def __init__(self):
         super().__init__()
         self.menu_background = Entity(
-            parent=camera.ui, model="quad", texture="main_texture.png", scale=2, z=1
+            parent=camera.ui,
+            model="quad",
+            texture=os.path.join(os.path.dirname(__file__), "main_texture.png"),
+            scale=2,
+            z=1,
         )
         self.title = Text(
             "RELATIVITY \n SIMULATOR",
