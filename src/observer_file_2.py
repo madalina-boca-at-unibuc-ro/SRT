@@ -22,10 +22,8 @@ class Observer_2(Entity):
         self.orient_camera()
 
     def orient_camera(self):
-        direction_to_origin = Vec3(0, 0, 0) - self.position
-        self.rotation_y = math.degrees(
-            math.atan2(direction_to_origin.x, direction_to_origin.z)
-        )
+        target_position = Vec3(0, 0, 0)
+        self.look_at(target_position)
 
     def update(self):
         move = Vec3(

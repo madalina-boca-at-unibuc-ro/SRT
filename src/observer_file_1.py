@@ -23,11 +23,12 @@ class Observer_1(Entity):
         )
 
     def orient_camera(self, target_position=Vec3(0, 0, 0)):
-        # rotate camera to look at origin
-        direction_to_origin = target_position - self.position
-        self.rotation_y = (
-            np.atan2(direction_to_origin.x, direction_to_origin.z) * 180 / pi
-        )
+        # rotate camera to look at the target position
+        self.look_at(target_position)
+  #      direction_to_origin = target_position - self.position
+  #      self.rotation_y = (
+  #          np.atan2(direction_to_origin.x, direction_to_origin.z) * 180 / pi
+  #      )
 
     def update(self):
         # Only allow movement when simulation is paused

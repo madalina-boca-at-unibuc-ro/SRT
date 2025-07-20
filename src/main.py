@@ -1,7 +1,7 @@
 import os
 import sys 
 
-from ursina import Entity, Text, Button, camera, color, mouse, application
+from ursina import Entity, Text, Button, camera, color, mouse, application, Vec3
 from ursina.prefabs.first_person_controller import FirstPersonController
 from ursina import Ursina
 
@@ -19,6 +19,7 @@ class MainMenu(Entity):
             parent=camera.ui,
             model="quad",
             texture="main_texture.jpg",
+            scale=Vec3(2, 2, 2),
             z=1,
         )
         self.title = Text(
@@ -28,7 +29,7 @@ class MainMenu(Entity):
             origin=(0, 0),
             z=-1,
             parent=camera.ui,
-            color=color.white,
+            color=color.azure,
         )
 
         self.text_box = Text(

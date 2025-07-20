@@ -11,8 +11,9 @@ The scenarios are **functional** but start in a **paused state**. Here's how to 
 3. **Press SPACE** to start the simulation (it starts paused)
 4. **Watch the cubes**: You'll see two cubes - white (real) and red (apparent)
 5. **Move around**: Use WASD to move when paused, mouse to look around
-6. **Press SPACE again** to pause/resume
-7. **Press ESC** to return to main menu
+6. **Focus camera**: Press R to rotate camera towards the red cube. 
+7. **Press SPACE again** to pause/resume
+8. **Press ESC** to return to main menu
 
 ### Scenario 2: Doppler Effect
 
@@ -33,7 +34,7 @@ The scenarios are **functional** but start in a **paused state**. Here's how to 
 
 ### What to Look For
 
-**Scenario 1**: The red cube (apparent) will appear to rotate differently from the white cube (real) due to the Terrell rotation effect.
+**Scenario 1**: The white cube starts moving at $t=0$ as a rigid body. The observer will se the red (apparent) cube; each of its corners starts moving at different moments, due to the different distance to the observer, so the red cube appears rotated. This is the Terrell rotation.
 
 **Scenario 2**: The spheres will change color as you move around, demonstrating the relativistic Doppler effect.
 
