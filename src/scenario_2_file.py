@@ -5,6 +5,7 @@ from observer_file_2 import Observer_2
 
 class Scenario2:
     def __init__(self, escape_callback=None):
+
         self.dt = 0.01
         self.t = 0
         self.player = Observer_2()
@@ -44,6 +45,52 @@ class Scenario2:
             color=color.red,
         )
 
+        # Speed input UI
+        self.speed_input_label = Text(
+            text="Set observer speed (0 to 0.99):",
+            origin=(-0.5, 0),
+            x=-0.75,
+            y=0.4,
+            scale=0.8,
+            parent=camera.ui,
+            color=color.white,
+        )
+
+        self.speed_input_field = InputField(
+            default_value="0.1",
+            limit_content_to="0123456789.",
+            character_limit=5,
+            scale=(0.2, 0.05),
+            x=-0.2,
+            y=0.4,
+            parent=camera.ui,
+        )
+
+        self.speed_set_button = Button(
+            text="Set Speed",
+            scale=(0.1, 0.05),
+            x=0.05,
+            y=0.4,
+            color=color.azure,
+            highlight_color=color.light_gray,
+            pressed_color=color.lime,
+            parent=camera.ui,
+        )
+
+        def apply_speed():
+            try:
+                speed = float(self.speed_input_field.text)
+                speed = max(0, min(speed, 0.99))  # Clamp
+                self.player.speed = speed
+                print(f"Observer speed set to: {speed}")
+            except ValueError:
+                print("Invalid input")
+
+            mouse.locked = True
+            mouse.visible = False
+
+        self.speed_set_button.on_click = apply_speed
+
         self.state_text = Text(
             text="Paused",
             origin=(-0.5, 0),
@@ -81,3 +128,13 @@ class Scenario2:
             destroy(line)
         self.spheres.clear()
         self.lines.clear()
+
+        if hasattr(self, "speed_set_button") and self.speed_set_button is not None:
+            destroy(self.speed_set_button)
+            self.speed_set_button = None
+        if hasattr(self, "speed_input_field") and self.speed_input_field is not None:
+            destroy(self.speed_input_field)
+            self.speed_input_field = None
+        if hasattr(self, "speed_input_label") and self.speed_input_label is not None:
+            destroy(self.speed_input_label)
+            self.speed_input_label = None

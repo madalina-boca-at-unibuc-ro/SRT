@@ -1,6 +1,11 @@
 import os
 import sys
 
+import builtins
+from collections.abc import Sequence
+
+builtins.Sequence = Sequence
+
 from ursina import Entity, Text, Button, camera, color, mouse, application, Vec3
 from ursina.prefabs.first_person_controller import FirstPersonController
 from ursina import Ursina
@@ -84,7 +89,9 @@ class MainMenu(Entity):
         )
 
         self.btn1.on_click = lambda: load_scenario(Scenario1)
-        self.btn2.on_click = lambda: load_scenario(Scenario2)
+        self.btn2.on_click = lambda: load_scenario(
+            Scenario2, mouse_locked=False, mouse_visible=True
+        )
         self.btn3.on_click = lambda: load_scenario(ScenarioTestColors)
         self.quit_btn.on_click = application.quit
 
@@ -114,13 +121,13 @@ current_scenario = None
 main_menu = MainMenu()
 
 
-def load_scenario(scenario_class):
+def load_scenario(scenario_class, mouse_locked=True, mouse_visible=False):
     global current_scenario
     main_menu.hide()
     current_scenario = scenario_class(escape_callback=handle_escape)
     # Lock mouse for scenario interaction
-    mouse.locked = True
-    mouse.visible = False
+    mouse.locked = mouse_locked
+    mouse.visible = mouse_visible
 
 
 def handle_escape():
