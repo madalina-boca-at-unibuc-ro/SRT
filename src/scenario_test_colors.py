@@ -23,12 +23,9 @@ class ScenarioTestColors:
         offset_x = -grid_x_size // 2 * spacing
         wavelength_grid = np.linspace(300, 800, grid_x_size)
 
-        print(len(wavelength_grid))
-
         # Create spheres in a 2x2 vertical grid
         sphere_positions = []
         for ix, x in enumerate(range(grid_x_size)):
-            print(ix, x)
             pos = Vec3(offset_x + x * spacing, 0.5, 0.5)
             sphere = MovingSphere_2(start_pos=pos)
             self.spheres.append(sphere)

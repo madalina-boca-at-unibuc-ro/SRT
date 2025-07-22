@@ -6,11 +6,12 @@ from observer_file_2 import Observer_2
 class Scenario2:
     def __init__(self, escape_callback=None):
 
-        self.dt = 0.01
+        self.dt = 0.04
         self.t = 0
+        self.running_state = False  # Initialize running_state for clarity
         self.player = Observer_2()
         self.escape_callback = escape_callback
-        self.update_interval = 0.01
+        self.update_interval = 0.04
         self.accumulated_time = 0
 
         self.sky = Sky()
@@ -24,7 +25,7 @@ class Scenario2:
         offset_x = -grid_x_size // 2 * spacing
         offset_y = -grid_y_size // 2 * spacing
 
-        # Create spheres in a 2x2 vertical grid
+        # Create spheres in a 2x2 horizontal grid
         sphere_positions = []
         for x in range(grid_x_size):
             for y in range(grid_y_size):
@@ -60,7 +61,7 @@ class Scenario2:
             default_value="0.1",
             limit_content_to="0123456789.",
             character_limit=5,
-            scale=(0.2, 0.05),
+            scale=(0.4, 0.1),
             x=-0.2,
             y=0.4,
             parent=camera.ui,
@@ -102,10 +103,23 @@ class Scenario2:
             color=color.red,
         )
 
+        self.player.input_field_focus_ref = lambda: self.speed_input_field.focused
+
     def input(self, key):
         if key == "escape":
             if self.escape_callback:
+                self.cleanup()  # Ensure cleanup on escape
                 self.escape_callback()
+        elif key == "space":  # Add space key for pause/resume if desired for Scenario 2
+            self.running_state = not self.running_state
+            if self.running_state:
+                print("Scenario 2 Running.")
+                mouse.locked = True
+                mouse.visible = False
+            else:
+                print("Scenario 2 Paused.")
+                mouse.locked = False
+                mouse.visible = True
 
     def update(self):
         self.accumulated_time += time.dt
@@ -113,7 +127,7 @@ class Scenario2:
             self.accumulated_time -= self.update_interval
             self.t += self.update_interval
             self.state_text.text = f"Time: {self.t:.2f}s"
-            self.player.update(self.t)
+            self.player.update(self.t, mouse.locked)
             for sphere in self.spheres:
                 sphere.update(self.player, self.t)  # update culori
 
