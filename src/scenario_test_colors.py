@@ -1,13 +1,15 @@
 from ursina import *
 from moving_sphere_2 import MovingSphere_2
 from observer_file_2 import Observer_2
+from lambda2rgb import wavelength_to_rgb
+import numpy as np
 
 
-class Scenario2:
+class ScenarioTestColors:
     def __init__(self, escape_callback=None):
         self.dt = 0.01
         self.t = 0
-        self.player = Observer_2()
+        self.player = Observer_2(start_pos=Vec3(0, 1, -20))
         self.escape_callback = escape_callback
         self.update_interval = 0.01
         self.accumulated_time = 0
@@ -16,39 +18,29 @@ class Scenario2:
 
         # grila de sfere
         self.spheres = []
-        self.lines = []
         grid_x_size = 100
-        grid_y_size = 100
         spacing = 0.125
         offset_x = -grid_x_size // 2 * spacing
-        offset_y = -grid_y_size // 2 * spacing
+        wavelength_grid = np.linspace(300, 800, grid_x_size)
+
+        print(len(wavelength_grid))
 
         # Create spheres in a 2x2 vertical grid
         sphere_positions = []
-        for x in range(grid_x_size):
-            for y in range(grid_y_size):
-                pos = Vec3(offset_x + x * spacing, -0.5, offset_y + y * spacing)
-                sphere = MovingSphere_2(start_pos=pos)
-                self.spheres.append(sphere)
-                sphere_positions.append((x, y, pos))
+        for ix, x in enumerate(range(grid_x_size)):
+            print(ix, x)
+            pos = Vec3(offset_x + x * spacing, 0.5, 0.5)
+            sphere = MovingSphere_2(start_pos=pos)
+            self.spheres.append(sphere)
+            sphere_positions.append((x, pos))
+            sphere.color = color.rgb(*wavelength_to_rgb(wavelength_grid[ix]))
 
         # ui
         self.text_box = Text(
-            text="WASD: Move\nShift: Up/Down\nSPACE: Pause/Resume\nESC: Back to Menu",
+            text="list of colors",
             origin=(-0.5, 0),
             x=-0.75,
             y=-0.35,
-            scale=0.8,
-            z=-1,
-            parent=camera.ui,
-            color=color.red,
-        )
-
-        self.state_text = Text(
-            text="Paused",
-            origin=(-0.5, 0),
-            x=-0.75,
-            y=0.25,
             scale=0.8,
             z=-1,
             parent=camera.ui,
@@ -65,19 +57,12 @@ class Scenario2:
         if self.accumulated_time >= self.update_interval:
             self.accumulated_time -= self.update_interval
             self.t += self.update_interval
-            self.state_text.text = f"Time: {self.t:.2f}s"
             self.player.update(self.t)
-            for sphere in self.spheres:
-                sphere.update(self.player, self.t)  # update culori
 
     def cleanup(self):
         destroy(self.player)
         destroy(self.sky)
         destroy(self.text_box)
-        destroy(self.state_text)
         for sphere in self.spheres:
             destroy(sphere)
-        for line in self.lines:
-            destroy(line)
         self.spheres.clear()
-        self.lines.clear()

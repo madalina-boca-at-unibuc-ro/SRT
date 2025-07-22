@@ -1,5 +1,5 @@
 import os
-import sys 
+import sys
 
 from ursina import Entity, Text, Button, camera, color, mouse, application, Vec3
 from ursina.prefabs.first_person_controller import FirstPersonController
@@ -9,6 +9,7 @@ app = Ursina()
 
 from scenario_1_file import Scenario1
 from scenario_2_file import Scenario2
+from scenario_test_colors import ScenarioTestColors
 
 
 # === Main Menu ===
@@ -61,10 +62,20 @@ class MainMenu(Entity):
             highlight_color=color.light_gray,
             pressed_color=color.lime,
         )
+        self.btn3 = Button(
+            text="Scenario 3\nThe Colors\n of the Spectrum",
+            scale=(0.3, 0.1),
+            y=-0.2,
+            z=-1,
+            parent=camera.ui,
+            color=color.azure,
+            highlight_color=color.light_gray,
+            pressed_color=color.lime,
+        )
         self.quit_btn = Button(
             text="Quit",
             scale=(0.3, 0.1),
-            y=-0.2,
+            y=-0.35,
             z=-1,
             parent=camera.ui,
             color=color.azure,
@@ -74,6 +85,7 @@ class MainMenu(Entity):
 
         self.btn1.on_click = lambda: load_scenario(Scenario1)
         self.btn2.on_click = lambda: load_scenario(Scenario2)
+        self.btn3.on_click = lambda: load_scenario(ScenarioTestColors)
         self.quit_btn.on_click = application.quit
 
         self.menu_elements = [
@@ -81,6 +93,7 @@ class MainMenu(Entity):
             self.title,
             self.btn1,
             self.btn2,
+            self.btn3,
             self.quit_btn,
             self.text_box,
         ]
@@ -142,10 +155,11 @@ class InputHandler(Entity):
     def input(self, key):
         if current_scenario and hasattr(current_scenario, "input"):
             current_scenario.input(key)
-    
+
     def update(self):
         if current_scenario:
             current_scenario.update()
+
 
 # Create the input handler
 input_handler = InputHandler()
